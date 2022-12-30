@@ -4,6 +4,11 @@ services:
     image: postgres:14
     volumes:
       - panopticondb:/var/lib/postgresql/data
+    networks:
+      panopticon-net:
+        aliases:
+          - panopticon_db
+
     environment:
       POSTGRES_USER: panopticon
       POSTGRES_PASSWORD: nocitponap
@@ -15,9 +20,16 @@ services:
 
   panopticon_2:
     build: .
+    networks:
+      - panopticon-net
     depends_on:
       db:
         condition: service_healthy
+
+networks:
+  panopticon-net:
+    name: panopticon
+    driver: bridge
 
 volumes:
   panopticondb:
